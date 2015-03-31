@@ -59,10 +59,10 @@ class Event(object):
         # Format information into google search format
         search_term = self.get_search_term(s)
         # Get the url by going through google search results
-        for result in g.search(search_term):
+        for i, result in enumerate(g.search(search_term)):
             url = result.url
-            # Check if valid url
-            if self.is_valid_url(url):
+            # Check if valid url and if relevant (shows up high on list)
+            if i < 4 and self.is_valid_url(url): 
                 return url
         # If there is nothing valid throw an error
         raise ValueError('No articles fit criteria')
@@ -81,7 +81,8 @@ class Event(object):
     def is_valid_url(self, url):
         """ Checks to see if a url is valid """
         # Valid urls should not contain the terms in this list
-        invalid_terms = ['blogs', 'opinion', 'gallery', 'photos']
+        invalid_terms = ['blogs', 'opinion', 'gallery', 'photos', 'live',
+                         'transcript']
         for t in invalid_terms:
             if t in url:
                 return False
